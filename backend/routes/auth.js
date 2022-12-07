@@ -25,18 +25,15 @@ route.post("/login", async (req, res) => {
     try {
       const user = await User.findOne({ email: req.body.email });
       !user && res.status(401).json("Tài khoản hoặc mật khẩu sai!");
-  
+      const isAdmin = user.isAdmin;
       const bytes = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY);
-      console.log("tuan1");
-      console.log(bytes)
+      console.log(isAdmin)
       const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
-      console.log("tuan2");
-      console.log("ttuan" + originalPassword)
       originalPassword !== req.body.password &&
         res.status(401).json("Tài khoản hoặc mật khẩu sai!");
   
       const accessToken = jwt.sign(
-        { id: user._id, isAdmin: user.isAdmin },
+        { id: user._id, isAdmin: isAdmin },
         process.env.SECRET_KEY,
         { expiresIn: "90d" }
       );

@@ -21,6 +21,7 @@ export default function NewMovie() {
   };
 
   const upload = (items) => {
+    console.log(items)
     items.forEach((item) => {
       const fileName = new Date().getTime() + item.label + item.file.name;
       const uploadTask = storage.ref(`/items/${fileName}`).put(item.file);
